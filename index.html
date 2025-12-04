@@ -162,6 +162,35 @@ textarea { resize: none; }
     
     #themeToggle{position:fixed;bottom:22px;right:22px;z-index:200;background:var(--glass-2);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.05);padding:12px;border-radius:12px;cursor:pointer;color:var(--muted);font-weight:700;box-shadow:0 8px 28px rgba(0,0,0,0.35);transition:transform .18s}
     #themeToggle:active{transform:scale(0.96)}
+  
+    /* Mobile Menu */
+    .mobile-menu-btn{
+      display:none;
+      font-size:1.6rem;
+      cursor:pointer;
+      color:var(--heading,#e6f0ff);
+    }
+    .mobile-menu{
+      display:none;
+      flex-direction:column;
+      background:var(--bg-dark-2);
+      position:fixed;
+      top:64px;
+      right:0;
+      width:200px;
+      padding:18px;
+      box-shadow:0 8px 28px rgba(0,0,0,0.4);
+      z-index:200;
+    }
+    .mobile-menu a{
+      color:var(--heading,#e6f0ff);
+      padding:10px 0;
+      font-weight:600;
+    }
+    @media(max-width:760px){
+      nav{display:none;}
+      .mobile-menu-btn{display:block;}
+    }
   </style>
 </head>
 <body>
@@ -173,7 +202,14 @@ textarea { resize: none; }
       <a role="button" href="#" data-page="why" class="navlink">Why RenewX</a>
       <a role="button" href="#" data-page="contact" class="navlink">Contact</a>
     </nav>
-  </header>
+    <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a role="button" data-page="home">Home</a>
+    <a role="button" data-page="impact">Impact</a>
+    <a role="button" data-page="why">Why RenewX</a>
+    <a role="button" data-page="contact">Contact</a>
+  </div>
+</header>
 
   <main>
     <div class="wrap" id="app">
@@ -320,6 +356,21 @@ textarea { resize: none; }
       if(page==='home') initThree();
       else stopThree();
     }
+
+    // mobile menu
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileBtn.addEventListener('click',()=>{
+      mobileMenu.style.display = mobileMenu.style.display==='flex' ? 'none' : 'flex';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click',()=>{
+        navigate(a.dataset.page);
+        mobileMenu.style.display='none';
+      });
+    });
 
     // wire nav clicks
     links.forEach(el=>el.addEventListener('click', (e)=>{e.preventDefault();navigate(el.dataset.page)}));
